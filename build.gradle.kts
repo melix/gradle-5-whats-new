@@ -4,5 +4,5 @@ plugins {
 
 presentation {
     githubUserName.set("melix")
-    githubRepoName.set("gradle-presentation-template")
+    githubRepoName.set("gradle-5-whats-new")
 }

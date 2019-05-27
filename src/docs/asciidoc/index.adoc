@@ -5,20 +5,16 @@ ifndef::sourcedir[:sourcedir: ../java]
 :navigation:
 :menu:
 :status:
-:title-slide-background-image: title.jpeg
+:title-slide-background-image: title.png
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
 :icons: font
 
-= : Switching to Gradle
+= : What's new in Gradle 5
 
-+++<h2>+++
-Maturity, performance and pleasure!
-+++</h2>+++
+Cédric Champeau (@CedricChampeau) - Gradle Inc.
 
-Cédric Champeau (@CedricChampeau) & Louis Jacomet (@ljacomet) - Gradle Inc.
-
-== Who are we?
+== Who am I?
 
 [%notitle]
 === Cedric
@@ -41,51 +37,305 @@ Misc OSS contribs'''
 }
 ----
 
-[%notitle]
-=== Louis
-[source,groovy]
-----
-speaker {
-    name 'Louis Jacomet'
-    company 'Gradle Inc'
-    past 'Terracotta / Ehcache',
-              'Freelance consultant',
-        failures Stream.of(bugs),
-        twitter '@ljacomet',
-        github 'ljacomet',
-        extraDescription '''Not fully figured out
-how to stay out of management?!?'''
-}
-----
-
 include::chapters/about-gradle.adoc[]
 
-== A screencast
+== Gradle releases
 
-screencast:step1[]
+image:releases.png[height=500]
 
-== Another screencast
+== Gradle 5 timeline
 
-screencast:step2[]
+image:timeline.png[height=500]
 
-== Conclusion
+[background-video="video/kotlin.mp4",options="loop,muted"]
+[%notitle]
+== Gradle meets Kotlin
 
-=== Gradle Enterprise
+//screencast:step2[]
 
-* On premise build cache and build scan solution
-* Out of the box solution for distributed build cache
-* Improved build scan feature set
-** Searchable build history
-** Build comparison
+== Kotlin DSL Benefits
 
-=== Sessions at Devoxx BE
+* Auto-completion and content assist
+* Quick documentation
+* Navigation to source
+* Refactoring and more
 
-* https://dvbe18.confinabox.com/talk/DBF-1594/project_versioning_like_a_git[Project versioning like a git]
-** Matthieu Brouillard
-** Wednesday, 13:30 - 13:45 Room 5
+== Should you adopt the Kotlin DSL?
 
-* https://dvbe18.confinabox.com/talk/VFH-6802/Improving_Android_Build_Performance[Improving Android Build performance]
-** Cédric Champeau
-**  Thursday, 16:30 - 17:15 Room 3
+* Already using Gradle 5.0+?
+* Using `plugins {}` (not `buildscript {}`)?
+* Does your IDE support Kotlin DSL scripts?
+* Familiar with basic Kotlin syntax?
+* Do you know your https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/[migration strategy]?
+
+Yes to all → all aboard the Kotlin train
+
+== Kotlin DSL IDE support  as of May 2019
+
+image:compat-matrix.png[height=500]
+
+== Already tried Gradle Kotlin DSL?
 
 
+. It’s waaaaaaay better in 5.0
+. Feedback welcome: https://github.com/gradle/kotlin-dsl/issues
+
+[%notitle]
+== Docs
+
+https://docs.gradle.org/c/kotlin_dsl[docs.gradle.org/c/kotlin_dsl]
+
+== Build performance
+
+== Configuration time optimizations
+
+image:build-perf.png[height=350]
+
+== Incremental Compilation for Java
+
+* Analyze class dependencies to optimize which classes are recompiled
+* Fast in-memory cache of class ABIs inside daemon
+
+_Do not mix sources in a single source set!_
+
+
+== Incremental Annotation Processing
+
+_Update to latest version of Dagger, Lombok, and other annotation processors!_
+
+== Composite Builds
+
+* Combine independent Gradle builds
+* Substitute binary with project dependencies
+* Quick local experimentation
+* Cross-repository refactoring
+* Smooth migration from monolith to multi-repo
+
+[%notitle]
+== Build cache
+
+image:build-cache.png[height=480]
+
+== Build cache
+
+video::../video/build-cache.mp4[height=480]
+
+== https://gradle.com/s/sr5y2ufwamkb2
+
+image:build-scan.png[height=480]
+
+== —fail-fast test
+
+video::../video/fail-fast.mp4[height=480]
+
+[%notitle]
+== Performance guide
+
+https://guides.gradle.org/performance[guides.gradle.org/performance]
+
+== New Gradle APIs
+
+== New API highlights
+
+* Task timeouts API
+* Provider APIs (Lazy properties)
+* Configuration Avoidance APIs
+* Custom POM/Ivy module DSLs
+* Custom CLI flags for tasks
+* Worker APIs (Parallel task execution)
+
+== Task timeouts
+
+video::../video/task-timeouts.mp4[height=480]
+
+== JUnit Platform
+
+video::../video/junit-platform.mp4[height=480]
+
+== Type-safe POM customization
+
+video::../video/pom.mp4[height=480]
+
+== Worker API
+
+image:worker-api.png[height=480]
+
+== Worker API
+
+image:worker-api2.png[height=480]
+
+== Worker API
+
+image:worker-api3.png[height=480]
+
+== CLI Options API
+
+image:cli-options.png[height=480]
+
+== CLI improvements
+
+* Filter tasks by group, e.g, :`tasks —group=Build`
+* `gradle init` has additional project bootstrapping templates
+
+== Searchable Documentation
+
+image:search-docs.png[height=480]
+
+== Dependency management
+
+== Native BOM support
+
+* Faster than `spring-dependency-management`
+
+```groovy
+dependencies {
+   implementation(platform("org.springframework.boot:spring-boot-dependencies:2.1.4.RELEASE"))
+   implementation("org.codehaus.groovy:groovy")
+}
+```
+
+== Rich version declarations
+
+* Try to _make sense_ of what a version number means
+* Give _reasons_ for a dependency
+
+=== Custom reasons
+
+```groovy
+dependencies {
+   implementation("org.codehaus.groovy:groovy:2.4.7") {
+      because("Needed for dynamic script evaluation at runtime")
+   }
+}
+```
+
+=== Require
+
+* This is the default, gracefully upgrades in case of conflict
+
+```groovy
+dependencies {
+   implementation("org.codehaus.groovy:groovy") {
+      version {
+          require "2.4.11"
+      }
+   }
+}
+```
+
+=== Strictly
+
+* Fails if anyone else disagrees
+
+```groovy
+dependencies {
+   implementation("org.codehaus.groovy:groovy") {
+      version {
+          strictly "2.4.11"
+      }
+   }
+}
+```
+
+=== Prefer
+
+* This is the _weakest_, chosen if anyone else doesn't have a better idea
+* Allows _downgrades_
+
+```groovy
+dependencies {
+   implementation("org.codehaus.groovy:groovy") {
+      version {
+          require "[2.4.0, 3.0["
+          prefer "2.4.11"
+      }
+   }
+}
+```
+
+=== Reject
+
+* Allows rejecting some versions
+
+```groovy
+dependencies {
+   implementation("org.codehaus.groovy:groovy") {
+      version {
+          require "[2.4.0, 3.0["
+          prefer "2.4.11"
+          reject "2.4.10"
+      }
+   }
+}
+```
+
+== Java Platform Plugin
+
+A platform can be used for different purposes:
+
+* a description of modules which are published together (and for example, share the same version)
+* a set of recommended versions for heterogeneous libraries. A typical example includes the Spring Boot BOM
+* sharing a set of dependency versions between subprojects
+
+=== Java Platform Plugin
+
+```groovy
+plugins {
+   id 'java-platform'
+}
+
+dependencies {
+    constraints {
+        // Platform declares some versions of libraries used in subprojects
+        api 'commons-httpclient:commons-httpclient:3.1'
+        api 'org.apache.commons:commons-lang3:3.8.1'
+    }
+}
+
+```
+
+=== Java Platform Plugin
+
+```groovy
+dependencies {
+    // get recommended versions from the platform project
+    api platform(project(':platform'))
+    // no version required
+    api 'commons-httpclient:commons-httpclient'
+}
+
+```
+
+== Repository to dependency matching
+
+```groovy
+repositories {
+    maven {
+        url "https://repo.mycompany.com"
+        content {
+           includeGroupByRegex "com\\.mycompany.*"
+        }
+    }
+}
+```
+
+== Dependency version alignment
+
+* e.g "align all Jackson modules to the same version"
+
+== Dependency locking
+
+* Makes dynamic versions (`latest`, `1.+`, `[1.0, 2.0)`) usable (safely reproducible)
+* Locks all dynamic versions
+* Fails the build if a version is not expected
+
+== Gradle Module Metadata
+
+See https://blog.gradle.org/gradle-metadata-1.0[blog.gradle.org/gradle-metadata-1.0]
+
+== Wrap-up
+
+[%notitle]
+== Thank you
+
+image::thank-you.png[background, size=cover]

@@ -101,6 +101,7 @@ class AsciidoctorPresentationPlugin : Plugin<Project> {
                 resources(delegateClosureOf<CopySpec> {
                     from(sourceDir) {
                         include("images/**")
+                        include("video/**")
                     }
                     from("${revealJsDir.get().asFile}/reveal.js-${extension.revealjsVersion.get()}") {
                         into("reveal.js")

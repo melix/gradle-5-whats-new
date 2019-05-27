@@ -45,6 +45,11 @@ body {
     font-weight: inherit;
 }
 
+.slide-background {
+   background-image: url("../../../images/background.png");
+   background-size: 960 700;
+}
+
 /*********************************************
  * HEADERS
  *********************************************/
@@ -99,6 +104,10 @@ body {
 .title p {
     color: white;
     font-size: 0.7em;
+}
+
+.title section {
+    top: 0px !important;
 }
 
 .author {
@@ -362,6 +371,10 @@ section.has-dark-background h3 {
 
 .reveal .controls .navigate-down.enabled:hover {
     border-top-color: #00C489;
+}
+
+.reveal .controls {
+    right: 100px;
 }
 
 /*********************************************
