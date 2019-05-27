@@ -37,8 +37,6 @@ Misc OSS contribs'''
 }
 ----
 
-include::chapters/about-gradle.adoc[]
-
 == Gradle releases
 
 image:releases.png[height=500]
